@@ -2,34 +2,44 @@
 <html>
   <head>
     <title>tarot_oneoracle_01</title>
-    <link rel ="stylesheet" href ="./src/styles.css">
+    <link rel="stylesheet" href="./src/styles.css" />
     <meta charset="UTF-8" />
   </head>
 
   <body>
     <h2>ワンオラクル (サンプル※1)</h2>
 
-    <div id="tarot">
-      <img src="./image/card_ura_01.png" id="cardImg" /><br />
-      <table id="result" align="center" border="0">
-        <tr>
-          <td id="cardPosition" width="20">－</td>
-          <td id="cardName">－－－－－－－</td>
-        </tr>
-      </table>
+    <div id="cardImg">
+      <img src="./image/card_ura_01.png" id="card" />
     </div>
+    <br />
 
-    <div id="tip">
-      <p id="selectPosition">
+    <table id="result" align="center" border="0">
+      <tr>
+        <td id="cardPosition" width="20">－</td>
+        <td id="cardName">－－－－－－－</td>
+      </tr>
+    </table>
+
+    <div>
+      <div id="selectPosition">
         <input type="radio" name="select" value="0" checked />正位置のみ
         <input type="radio" name="select" value="1" />逆位置あり
-      </p>
-      <p id="button">
-        <input type="button" name="shuffleCard" id="shuffleCard" value="シャッフル" />
-        <input type="button" name="dealCard" id="dealCard" value="1枚引く" />
-        <input type="button" name="resetAll" id="resetAll" value="リセット" />
-      </p>
-      <p>※1 大アルカナ、小アルカナ15枚のみの簡易版</p>
+      </div>
+
+      <div>
+        <button type="button" name="shuffleButton" id="shuffleButton" value="1">
+          シャッフル
+        </button>
+        <button type="button" name="dealButton" id="dealButton" value="1">
+          1枚引く
+        </button>
+        <button type="button" name="resetButton" id="resetButton" value="1">
+          リセット
+        </button>
+      </div>
+
+      <p>※1 大アルカナ、小アルカナ15枚のみ</p>
     </div>
 
     <script src="src/index.js"></script>
