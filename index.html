@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>tarot_oneoracle_01</title>
+    <link rel ="stylesheet" href ="./src/styles.css">
     <meta charset="UTF-8" />
   </head>
 
@@ -9,24 +10,24 @@
     <h2>ワンオラクル (サンプル※1)</h2>
 
     <div id="tarot">
-      <img src="./image/card_ura_01.png" id="card" /><br />
+      <img src="./image/card_ura_01.png" id="cardImg" /><br />
       <table id="result" align="center" border="0">
         <tr>
-          <td id="position" width="20">－</td>
+          <td id="cardPosition" width="20">－</td>
           <td id="cardName">－－－－－－－</td>
         </tr>
       </table>
     </div>
 
     <div id="tip">
-      <p id="select">
+      <p id="selectPosition">
         <input type="radio" name="select" value="0" checked />正位置のみ
         <input type="radio" name="select" value="1" />逆位置あり
       </p>
       <p id="button">
-        <input type="button" name="shuffle" id="shuffle" value="シャッフル" />
-        <input type="button" name="deal" id="deal" value="1枚引く" />
-        <input type="button" name="reset" id="reset" value="リセット" />
+        <input type="button" name="shuffleCard" id="shuffleCard" value="シャッフル" />
+        <input type="button" name="dealCard" id="dealCard" value="1枚引く" />
+        <input type="button" name="resetAll" id="resetAll" value="リセット" />
       </p>
       <p>※1 大アルカナ、小アルカナ15枚のみの簡易版</p>
     </div>
