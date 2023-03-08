@@ -7,25 +7,23 @@
   </head>
 
   <body>
-    <h3>ワンオラクル (簡易※1)</h3>
+    <h3>ワンオラクル (簡易版※1)</h3>
 
-    <div id="cardImg">
-      <img src="./image/card_ura_01.png" id="card" />
-    </div>
-    <br />
+    <div id="cardImg"></div>
 
     <table id="result" align="center" border="0">
       <tr>
-        <td id="cardPosition" width="20">－</td>
-        <td id="cardName">－－－－－－－</td>
+        <td id="cardPosition" width="60"></td>
+        <td id="cardName"></td>
       </tr>
     </table>
+    <br />
 
     <div>
-      <div id="selectPosition">
-        <input type="radio" name="select" value="0" checked />正位置のみ
-        <input type="radio" name="select" value="1" />逆位置あり
-      </div>
+      <form name="selectPosition">
+        <input type="radio" name="positions" value="0" checked />正位置のみ
+        <input type="radio" name="positions" value="1" />逆位置あり
+      </form>
 
       <div>
         <button type="button" name="shuffleButton" id="shuffleButton" value="1">
@@ -39,7 +37,19 @@
         </button>
       </div>
 
-      <p>※1 大アルカナ、小アルカナ15枚のみ</p>
+      <div>
+        <table border="0" width="80%" align="center">
+          <tr>
+            <td class="notes" id="notes1"></td>
+          </tr>
+          <tr>
+            <td class="notes" id="notes2"></td>
+          </tr>
+          <tr>
+            <td class="notes" id="notes3"></td>
+          </tr>
+        </table>
+      </div>
     </div>
 
     <script src="src/index.js"></script>

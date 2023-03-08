@@ -2,3 +2,46 @@ body {
   font-family: sans-serif;
   text-align: center;
 }
+
+#back {
+  width: 50%;
+  padding: 2%;
+  transform: scale(1, 1);
+}
+
+#right {
+  width: 50%;
+  transform: scale(1, 0.9);
+}
+
+#reverse {
+  width: 50%;
+  transform: scale(-1, -0.9);
+}
+
+.notes {
+  font-size: 15%;
+  text-align: left;
+}
+
+.animation {
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 3;
+  animation-direction: alternate;
+  animation-duration: 0.08s;
+}
+
+.keyframe0 {
+  animation-name: anim_s;
+  transform: rotate(30deg);
+  animation-duration: 0.08s;
+}
+
+@keyframes anim_s {
+  50% {
+    transform: rotate(-5deg);
+  }
+  100% {
+    transform: rotate(5deg);
+  }
+}
