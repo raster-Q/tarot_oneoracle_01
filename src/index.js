@@ -23,7 +23,7 @@
   //------変数定義-------------
   //---DOM操作関連
   const cardImg = document.getElementById("cardImg"); //カード画像表示
-  //const cardPosition = document.getElementById("cardPosition"); //正逆表示
+  const cardPosition = document.getElementById("cardPosition"); //正逆表示
   const cardName = document.getElementById("cardName"); //カード名表示
 
   //---ボタン関連
@@ -34,6 +34,7 @@
 
   //---カードデータ関連
   const cac = [
+    //★ ca(ad) + c ★//カードデータ格納配列
     {
       img:
         "https://upload.wikimedia.org/wikipedia/commons/d/de/RWS_Tarot_01_Magician.jpg",
@@ -56,16 +57,21 @@
   ];
 
   //---正逆関連
+  let resultPosition = 1; //正逆結果
+  const posp = [
+    //★ pos(ition) + p ★//正逆格納配列
+    { position: 0, word: "正", disp: 1 },
+    { position: 1, word: "逆", disp: -1 }
+  ];
 
   //---各種変数
-  var arrNums = []; //シャッフル完了数字格納
-  var result = 0; //1枚引き用
+  let arrNums = []; //シャッフル完了数字格納
+  let resultCard = 0; //1枚引き結果
 
   //------変数、ここまで--------
 
   ////////初期配置////////////////////////////////////////
   arrNums = [...Array(cac.length).keys()];
-  console.log("111" + cardImg);
   ////////初期配置、ここまで////////////////////////////////////////
 
   //------スクリプト記述--------
@@ -83,11 +89,16 @@
   dealButton.addEventListener(
     "click",
     function () {
-      result = arrNums.pop();
-      console.log(result);
-      console.log(cac[result].img);
-      cardImg.innerHTML = `<img src="${cac[result].img}" id ="card"></img>`;
-      cardName.innerHTML = `${cac[result].name}`;
+      resultCard = arrNums.pop();
+      console.log(resultCard);
+      console.log(cac[resultCard].img);
+      cardImg.innerHTML = `<img src="${
+        cac[resultCard].img
+      }"  style="transform: scale(${posp[resultPosition].disp},${
+        posp[resultPosition.disp]
+      }); ></img>`;
+      cardName.innerHTML = `${cac[resultCard].name}`;
+      cardPosition.innerHTML = `${posp[resultPosition].word}`;
     },
     false
   );
