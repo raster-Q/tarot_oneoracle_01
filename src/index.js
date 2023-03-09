@@ -3,7 +3,7 @@
 
   ////////ここから/////////////////
 
-  //------関数定義-------------
+  //------関数定義------------//
   //---シャッフル用関数
   function shuffle(arr) {
     let n = arr.length;
@@ -16,27 +16,30 @@
       arr[i] = temp;
     }
     return arr;
-  }
-  //---ここまで、シャッフル用関数
-  //------関数、ここまで--------
+  } //---ここまで、シャッフル用関数
+  //------関数、ここまで--------//
 
-  //------変数定義-------------
-  //---DOM操作関連
+  //------DOM操作定義----------//
+  //---HTML操作
   const cardImg = document.getElementById("cardImg"); //カード画像表示
   const cardPosition = document.getElementById("cardPosition"); //正逆表示
   const cardName = document.getElementById("cardName"); //カード名表示
-  const notes1 = document.getElementById("notes1");
-  const notes2 = document.getElementById("notes2");
-  const notes3 = document.getElementById("notes3");
+  const notes1 = document.getElementById("notes1"); //※1用
+  const notes2 = document.getElementById("notes2"); //※2用
+  const notes3 = document.getElementById("notes3"); //※3用
   //---ボタン関連
+
   const selectRadio = document.forms.selectPosition; //正逆ラジオボタン
   const shuffleButton = document.getElementById("shuffleButton"); //シャッフルボタン
   const dealButton = document.getElementById("dealButton"); //1枚引くボタン
-  const resetButton = document.getElementById("resetButton"); //リセットボタン
+  const resetButton = document.getElementById("resetButton"); //リセットボタン //---カードデータ2次元配列 //-★ ca(ad) + c ★
 
-  //---カードデータ関連
+  //------DOM操作、ここまで------//
+
+  //------配列定義--------------//
+  //---カードデータ2次元配列
+  //-★ c(ard) + c ★
   const cac = [
-    //★ ca(ad) + c ★ //カードデータ格納配列
     { img: "d/de/RWS_Tarot_01_Magician.jpg", name: "魔術師" },
     { img: "d/d7/RWS_Tarot_13_Death.jpg", name: "死神" },
     { img: "d/db/RWS_Tarot_17_Star.jpg", name: "星" },
@@ -51,18 +54,31 @@
     { img: "3/33/Swords14.jpg", name: "ソードK" }
   ];
 
-  //---正逆関連
-  const dicePosition = [0, 1];
-  let resultPosition = 0; //正逆結果
+  //---正逆2次元配列
+  //-★ pos(ition) + p ★
   const posp = [
-    //★ pos(ition) + p ★ //正逆格納配列
     { position: 0, word: "正位置", disp: "right" },
     { position: 1, word: "逆位置", disp: "reverse" }
   ];
 
-  //---各種変数
-  let arrNums = []; //シャッフル完了数字格納
-  let resultCard = 0; //1枚引き結果
+  //------配列、ここまで----------------//
+
+  //------オブジェクト定義--------------//
+  //---ダイス連想配列
+  const dice = {
+    tarot: [],
+    position: [0, 1]
+  };
+
+  //---出目（ダイス）格納
+  const result = {
+    tarot: null,
+    position: null
+  };
+
+  //------オブジェクト、ここまで---------//
+
+  //------各種変数
   let nn = 0; //引いた枚数
 
   //------変数、ここまで--------
@@ -71,15 +87,16 @@
   function reset() {
     cardImg.innerHTML = `<img src="./image/card_ura_01.png" id="back" />`;
     cardPosition.innerText = `－－－`;
-    cardName.innerText = `－－－－－－－`;
-    arrNums = [...Array(cac.length).keys()];
-    shuffle(arrNums);
-    notes1.textContent = `　　※1 大、小アルカナ${arrNums.length}枚のみ`;
-    notes2.textContent = `　　※2 引ける枚数は3枚まで`;
-    notes3.innerHTML = `　　※3 出典: フリー百科事典ウィキペディア<br>　　(Wikipedia)`;
+    cardName.innerText = `－－－－－－`;
+    dice.tarot = [...Array(cac.length).keys()]; //タロットの使用枚数を配列に取得
+    shuffle(dice.tarot);
+    notes1.textContent = `※1 カード枚数${dice.tarot.length}枚のみ`;
+    notes2.textContent = `※2 引ける枚数は3枚まで`;
+    notes3.innerHTML = `※3 タロットカード画像 出典:<br>　　フリー百科事典ウィキペディア (Wikipedia)`;
     nn = 0; //タロットを引いた枚数、0枚にリセット
-    shuffleButton.disabled = false;
-    dealButton.disabled = false;
+    shuffleButton.disabled = false; //シャッフルは、押せるように
+    resetButton.disabled = true; //リセットは、押せるように
+    dealButton.disabled = false; //1枚引くは、押せるように
   }
   reset();
   ////////初期配置、ここまで////////////////////////////////////////
@@ -89,34 +106,41 @@
   shuffleButton.addEventListener(
     "click",
     () => {
-      shuffle(arrNums);
-      cardImg.innerHTML = `<img src="./image/card_ura_01.png" id="back" class="keyframe0 animation" />`;
-      console.log(arrNums);
+      shuffle(dice.tarot);
+      cardImg.innerHTML = `<img src="./image/card_ura_01.png" alt="カードの裏" id="back" class="keyframe0 animation" />`;
     },
     false
-  );
+  ); //class追加により、cssによる画像のアニメーションを実現
 
   //---1枚引くボタン、イベント
   dealButton.addEventListener(
     "click",
     () => {
-      resultCard = arrNums.pop();
-      console.log(resultCard);
+      result.card = dice.tarot.pop(); //ダイスから1枚pop
 
       if (selectRadio.positions.value === "0") {
-        resultPosition = 0;
+        //ラジオボタンの判定
+        result.position = 0; //正位置のみ
       } else {
-        shuffle(dicePosition);
-        resultPosition = dicePosition[0];
+        shuffle(dice.position); //逆位置ありの場合のダイス判定
+        result.position = dice.position[0];
       }
 
-      cardImg.innerHTML = `<img src="https://upload.wikimedia.org/wikipedia/commons/${cac[resultCard].img}" id="${posp[resultPosition].disp}"></img>`;
-      cardName.innerHTML = `${cac[resultCard].name}`;
-      cardPosition.innerHTML = `${posp[resultPosition].word}`;
+      cardImg.innerHTML = `<img src="https://upload.wikimedia.org/wikipedia/commons/${
+        cac[result.card].img
+      }" id="${posp[result.position].disp}" alt="${
+        cac[result.card].name
+      }" ></img>`;
+
+      cardName.innerHTML = `${cac[result.card].name}`;
+      cardPosition.innerHTML = `${posp[result.position].word}`;
       shuffleButton.disabled = true;
-      nn++;
+
+      nn++; //何枚引いたかのカウント
       if (nn >= 3) {
         dealButton.disabled = true;
+      } else {
+        resetButton.disabled = false;
       }
     },
     false

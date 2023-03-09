@@ -7,49 +7,70 @@
   </head>
 
   <body>
-    <h3>ワンオラクル (簡易版※1)</h3>
-
-    <div id="cardImg"></div>
-
-    <table id="result" align="center" border="0">
-      <tr>
-        <td id="cardPosition" width="60"></td>
-        <td id="cardName"></td>
-      </tr>
-    </table>
-    <br />
-
     <div>
-      <form name="selectPosition">
-        <input type="radio" name="positions" value="0" checked />正位置のみ
-        <input type="radio" name="positions" value="1" />逆位置あり
-      </form>
-
-      <div>
-        <button type="button" name="shuffleButton" id="shuffleButton" value="1">
-          シャッフル
-        </button>
-        <button id="dealButton" value="1">
-          1枚引く
-        </button>
-        <button id="resetButton" value="1">
-          リセット
-        </button>
-      </div>
-
-      <div>
-        <table border="0" width="80%" align="center">
-          <tr>
-            <td class="notes" id="notes1"></td>
-          </tr>
-          <tr>
-            <td class="notes" id="notes2"></td>
-          </tr>
-          <tr>
-            <td class="notes" id="notes3"></td>
-          </tr>
-        </table>
-      </div>
+      <table align="center" border="0" width="100%" class="wide">
+        <tr>
+          <td colspan="2"><h3>ワンオラクル (簡易版※1)</h3></td>
+        </tr>
+        <tr>
+          <td rowspan="10" id="cardImg"></td>
+          <td width="120px">
+            <button
+              type="button"
+              name="shuffleButton"
+              id="shuffleButton"
+              value="1"
+            >
+              シャッフル
+            </button>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <button id="resetButton" value="1">
+              リセット
+            </button>
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+        </tr>
+        <tr>
+          <td>
+            <button id="dealButton" value="1">
+              1枚引く
+            </button>
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+        </tr>
+        <tr>
+          <td>
+            <form name="selectPosition">
+              <input type="radio" name="positions" value="0" checked />正
+              <input type="radio" name="positions" value="1" />正＆逆
+            </form>
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="notes" id="notes1"></td>
+        </tr>
+        <tr>
+          <td class="notes" id="notes2"></td>
+        </tr>
+        <td></td>
+        <tr>
+          <td id="cardName"></td>
+          <td id="cardPosition"></td>
+        </tr>
+        <tr>
+          <td colspan="2" class="notes" id="notes3"></td>
+        </tr>
+      </table>
     </div>
 
     <script src="src/index.js"></script>

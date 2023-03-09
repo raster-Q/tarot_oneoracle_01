@@ -3,19 +3,34 @@ body {
   text-align: center;
 }
 
+h3 {
+  margin-top: 1%;
+  margin-bottom: 3%;
+}
+
+button {
+  width: 118px;
+}
+
+.wide {
+  margin: auto;
+  max-width: 300px;
+  min-width: 240px;
+}
+
 #back {
-  width: 50%;
+  width: 95%;
   padding: 2%;
   transform: scale(1, 1);
 }
 
 #right {
-  width: 50%;
+  width: 95%;
   transform: scale(1, 0.9);
 }
 
 #reverse {
-  width: 50%;
+  width: 95%;
   transform: scale(-1, -0.9);
 }
 
