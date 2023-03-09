@@ -61,6 +61,10 @@
     { position: 1, word: "逆位置", disp: "reverse" }
   ];
 
+  //---曜日配列
+  //-★ da(y) + d ★
+  const dad = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
   //------配列、ここまで----------------//
 
   //------オブジェクト定義--------------//
@@ -78,10 +82,55 @@
 
   //------オブジェクト、ここまで---------//
 
-  //------各種変数
+  //------各種変数-------------
   let nn = 0; //引いた枚数
 
   //------変数、ここまで--------
+
+  //------クラス関連------------
+  class oracle {
+    constructor(date) {
+      this.date = date;
+    }
+
+    makeTable() {
+      switch (nn) {
+        case 1:
+          this.oracle2.innerHTML = `<img src="https://upload.wikimedia.org/wikipedia/commons/${
+            cac[result.card].img
+          }" id="${posp[result.position].disp}" alt="${
+            cac[result.card].name
+          }" ></img>`;
+          break;
+
+        default:
+          this.leading = document.getElementById("leading");
+          this.leading.innerHTML = `<table align="center" border="1" width="100%" class="wide" >
+        <tr>
+          <td id="oracle1" wide="24%" ></td>
+          <td id="oracle2" width="24%" ></td>
+          <td id="oracle3" width="24%" ></td>
+          <td id="nowDate" width="24%" ></td>
+        </tr>
+        </table>`;
+          this.oracle1 = document.getElementById("oracle1");
+          this.oracle2 = document.getElementById("oracle2");
+          this.oracle3 = document.getElementById("oracle3");
+          this.nowDate = document.getElementById("nowDate");
+
+          this.nowDate.innerHTML = `${this.date.getFullYear()}/${this.date.getMonth()}/${this.date.getDate()}/${
+            dad[this.date.getDay()]
+          }<br>${this.date.getHours()}:${this.date.getMinutes()}:${this.date.getSeconds()}`;
+          this.oracle1.innerHTML = `<img src="https://upload.wikimedia.org/wikipedia/commons/${
+            cac[result.card].img
+          }" id="${posp[result.position].disp}" alt="${
+            cac[result.card].name
+          }" ></img>`;
+      }
+    }
+  }
+
+  //------クラス、ここまで-------
 
   ////////初期配置////////////////////////////////////////
   function reset() {
@@ -135,6 +184,13 @@
       cardName.innerHTML = `${cac[result.card].name}`;
       cardPosition.innerHTML = `${posp[result.position].word}`;
       shuffleButton.disabled = true;
+
+      if (nn === 0) {
+        const leading = new oracle(new Date());
+        leading.makeTable();
+      } else {
+        makeTable();
+      }
 
       nn++; //何枚引いたかのカウント
       if (nn >= 3) {

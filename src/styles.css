@@ -14,7 +14,7 @@ button {
 
 .wide {
   margin: auto;
-  max-width: 300px;
+  max-width: 240px;
   min-width: 240px;
 }
 
@@ -37,6 +37,10 @@ button {
 .notes {
   font-size: 15%;
   text-align: left;
+}
+
+#nowDate {
+  font-size: 1%;
 }
 
 .animation {
