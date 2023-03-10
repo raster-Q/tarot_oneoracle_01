@@ -20,6 +20,7 @@
               name="shuffleButton"
               id="shuffleButton"
               value="1"
+              class="button"
             >
               シャッフル
             </button>
@@ -27,7 +28,7 @@
         </tr>
         <tr>
           <td>
-            <button id="resetButton" value="1">
+            <button type="button" name="resetButton" id="resetButton" value="1" class="button">
               リセット
             </button>
           </td>
@@ -37,7 +38,7 @@
         </tr>
         <tr>
           <td>
-            <button id="dealButton" value="1">
+            <button  type="button" name="dealButton" id="dealButton" value="1"class="button" >
               1枚引く
             </button>
           </td>
@@ -72,8 +73,22 @@
         </tr>
       </table>
     </div>
+      <table align="center" border="0" width="100%" class="wide" id="spread">
+        <tr>
+          <td rowspan="3" id="oracle1" class="oracle"></td>          
+          <td rowspan="3" id="oracle2" class="oracle"></td>
+          <td rowspan="3" id="oracle3" class="oracle"></td>
+          <td  colspan="2" id="nowDate"></td>
+        </td>
+        <tr><td colspan="2" id="spreadNumber" ></td></tr>
+        <tr>
+          <td>
+            <button type="button" name="leftButton" id="leftButton" value="0">◀</button>
+          </td>
+          <td><button type="button" name="rightButton" id="rightButton" value="0" >▶</button></td></tr>  
+        </tr>
+      </table>
 
-    <div id="leading"></div>
 
     <script src="src/index.js"></script>
   </body>
