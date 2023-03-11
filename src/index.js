@@ -43,6 +43,11 @@
 
   //------DOM操作、ここまで------//
 
+  //------各種変数--------------//
+  let nn = 0; //引いた枚数
+
+  //------変数、ここまで---------//
+
   //------配列定義--------------//
   //---カードデータ2次元配列
   //-★ c(ard) + c ★
@@ -67,7 +72,6 @@
     { position: 0, word: "正位置", disp: "right" },
     { position: 1, word: "逆位置", disp: "reverse" }
   ];
-
   //------配列、ここまで----------------//
 
   //------オブジェクト定義--------------//
@@ -105,46 +109,39 @@
     position: [0, 1]
   };
 
-  //---出目（ダイス）格納
+  //---出目（ダイス）格納、及び、クラス生成の元
   const result = {
     tarot: [null, null, null],
     position: [null, null, null],
     clock: null,
     spreadNumber: 1
   };
+
+  //---カード表示用url作成
+  const place = {
+    //完全url
+    url: null,
+
+    //分解url配列
+    arr: [
+      '`<img src="https://upload.wikimedia.org/wikipedia/commons/',
+      cac[nn].img,
+      '" id="',
+      posp[nn].disp,
+      '" alt="',
+      cac[nn].name,
+      '" ></img>`'
+    ],
+
+    //合成url関数
+    combine: function () {
+      this.arr[1] = cac[result.tarot[nn]].img;
+      this.arr[3] = posp[result.position[nn]].disp;
+      this.arr[5] = cac[result.tarot[nn]].name;
+      this.url = this.arr.join("");
+    }
+  };
   //------オブジェクト、ここまで---------//
-
-  //------各種変数-------------
-  let nn = 0; //引いた枚数
-  let placeHtml;
-  const place = [
-    '`<img src="https://upload.wikimedia.org/wikipedia/commons/',
-    cac[nn].img,
-    '" id="',
-    posp[nn].disp,
-    '" alt="',
-    cac[nn].name,
-    '" ></img>`'
-  ];
-  function combine() {
-    //    place.arr[1] = place.cac[nn].img;
-    //     this.arr[3] = disp;
-    //     this.arr[5] = name;
-    place[1] = cac[nn].img;
-    placeHtml = place.join("");
-    //       place.join('');
-    //       return;
-  }
-
-  //console.log(place.join(""));
-
-  //`<img src="https://upload.wikimedia.org/wikipedia/commons/${
-  //  cac[result.tarot[nn]].img
-  //}" id="${posp[result.position[nn]].disp}" alt="${
-  //  cac[result.tarot[nn]].name
-  //}" ></img>`
-
-  //------変数、ここまで--------
 
   //------クラス関連------------
   class oracle {
@@ -196,7 +193,7 @@
     result.tarot = [null, null, null]; //結果内容初期化
     result.position = [null, null, null]; //結果内容初期化
     result.clock = null; //結果内容初期化
-    place.html = null; //
+    place.url = null; //
   }
   reset();
 
@@ -204,6 +201,7 @@
   clock.timer();
 
   ////////初期配置、ここまで////////////////////////////////////////
+
   //------スクリプト記述--------
   //---シャッフルボタン、イベント
   shuffleButton.addEventListener(
@@ -231,26 +229,12 @@
       }
 
       //引いたタロットカードの表示、ワンオラクル台
-      //place[1] = cac[nn].img;
-      //place.html = combine();
-      combine();
-      console.log(placeHtml);
-      cardImg.innerHTML = `${placeHtml}`;
-
-      //`<img src="https://upload.wikimedia.org/wikipedia/commons/${
-      //  cac[result.tarot[nn]].img
-      //}" id="${posp[result.position[nn]].disp}" alt="${
-      //  cac[result.tarot[nn]].name
-      //}" ></img>`;
+      place.combine();
+      console.log(place.url);
+      cardImg.innerHTML = `${place.url}`;
 
       //引いたタロットカードの表示、スプレッド台
-      clock.oracle[
-        nn
-      ].innerHTML = `<img src="https://upload.wikimedia.org/wikipedia/commons/${
-        cac[result.tarot[nn]].img
-      }" id="${posp[result.position[nn]].disp}" alt="${
-        cac[result.tarot[nn]].name
-      }" ></img>`;
+      clock.oracle[nn].innerHTML = `${place.url}`;
 
       //DOM操作
       notes3.innerHTML = `※3 タロットカード画像 出典:<br>　　フリー百科事典ウィキペディア (Wikipedia)`;
@@ -286,7 +270,7 @@
       console.log(result.spreadNumber);
 
       //////クラス導入、ログ書き込み////////
-      //////////////////////////////////
+      //////クラス導入、ここまで///////////
 
       result.spreadNumber++;
       reset();
