@@ -32,8 +32,8 @@
   const oracle3 = document.getElementById("oracle3"); //3枚目
   const nowDate = document.getElementById("nowDate"); //時間
   const spreadNumber = document.getElementById("spreadNumber"); //
-  //---ボタン関連
 
+  //---ボタン関連
   const selectRadio = document.forms.selectPosition; //正逆ラジオボタン
   const shuffleButton = document.getElementById("shuffleButton"); //シャッフルボタン
   const dealButton = document.getElementById("dealButton"); //1枚引くボタン
@@ -71,25 +71,31 @@
   //------配列、ここまで----------------//
 
   //------オブジェクト定義--------------//
-  //---ログ用連想格納
-  //-★ lo(g) + l ★
-  const lol = {
-    log: {
-      tarot: [],
-      position: [],
-      date: null,
-      spreadNumber: 0
-    },
+  //---クロック表示用連想格納
+  const clock = {
+    //date=表示用日付、time=表示用時間
     date: null,
-    day: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
     time: null,
-    num: 0,
+    day: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
     oracle: [oracle1, oracle2, oracle3],
+
+    //clock.dateとtimeへ、表示用日時を格納する関数
     now: function (Date) {
       this.date = `${Date.getFullYear()}/${
         Date.getMonth() + 1
       }/${Date.getDate()}/${this.day[Date.getDay()]}`;
       this.time = `${Date.getHours()}:${Date.getMinutes()}:${Date.getSeconds()}`;
+    },
+
+    //常時稼働のタイマー表示用関数
+    timerID: null,
+    timer: function () {
+      if (this.timerID === null) {
+        this.timerID = setInterval(() => {
+          this.now(new Date());
+          nowDate.innerHTML = `${this.date}<br>${this.time}`;
+        }, 10);
+      }
     }
   };
 
@@ -101,18 +107,42 @@
 
   //---出目（ダイス）格納
   const result = {
-    tarot: null,
-    position: null
+    tarot: [null, null, null],
+    position: [null, null, null],
+    clock: null,
+    spreadNumber: 1
   };
-
   //------オブジェクト、ここまで---------//
 
   //------各種変数-------------
   let nn = 0; //引いた枚数
-  let timerID = null; //時間取得用タイマーID
-  const place = `<img src="./image/card_ura_01.png" alt="カードの裏" id="${
-    posp[result.position]
-  }.disp" />`;
+  let placeHtml;
+  const place = [
+    '`<img src="https://upload.wikimedia.org/wikipedia/commons/',
+    cac[nn].img,
+    '" id="',
+    posp[nn].disp,
+    '" alt="',
+    cac[nn].name,
+    '" ></img>`'
+  ];
+  function combine() {
+    //    place.arr[1] = place.cac[nn].img;
+    //     this.arr[3] = disp;
+    //     this.arr[5] = name;
+    place[1] = cac[nn].img;
+    placeHtml = place.join("");
+    //       place.join('');
+    //       return;
+  }
+
+  //console.log(place.join(""));
+
+  //`<img src="https://upload.wikimedia.org/wikipedia/commons/${
+  //  cac[result.tarot[nn]].img
+  //}" id="${posp[result.position[nn]].disp}" alt="${
+  //  cac[result.tarot[nn]].name
+  //}" ></img>`
 
   //------変数、ここまで--------
 
@@ -144,7 +174,7 @@
   //---初期読み込みで、各種DOM操作
   leftButon.disabled = true; //初期読み込みで、押せない様に
   rightButton.disabled = true; //初期読み込みで、押せない様に
-  spreadNumber.innerHTML = `No.${lol.log.spreadNumber + 1}`; //初期読み込み時、スプレッドナンバー表示
+  spreadNumber.innerHTML = `No.${result.spreadNumber}`; //初期読み込み時、スプレッドナンバー表示
 
   function reset() {
     cardImg.innerHTML = `<img src="./image/card_ura_01.png" alt="カードの裏" id="back" />`; //カード裏面
@@ -162,19 +192,18 @@
     oracle1.innerHTML = ``; //表示を切る
     oracle2.innerHTML = ``; //表示を切る
     oracle3.innerHTML = ``; //表示を切る
-    spreadNumber.innerHTML = `No.${lol.log.spreadNumber + 1}`; //スプレッドナンバー表示
+    spreadNumber.innerHTML = `No.${result.spreadNumber}`; //スプレッドナンバー表示
+    result.tarot = [null, null, null]; //結果内容初期化
+    result.position = [null, null, null]; //結果内容初期化
+    result.clock = null; //結果内容初期化
+    place.html = null; //
   }
   reset();
 
-  //---初期読み込みで、時間取得用のタイマー発動
-  if (timerID === null) {
-    timerID = setInterval(() => {
-      lol.now(new Date());
-      nowDate.innerHTML = `${lol.date}<br>${lol.time}`;
-    }, 10);
-  }
-  ////////初期配置、ここまで////////////////////////////////////////
+  //---初期読み込みで、常時稼働のタイマー発動
+  clock.timer();
 
+  ////////初期配置、ここまで////////////////////////////////////////
   //------スクリプト記述--------
   //---シャッフルボタン、イベント
   shuffleButton.addEventListener(
@@ -192,50 +221,47 @@
   dealButton.addEventListener(
     "click",
     () => {
-      result.card = dice.tarot.pop(); //ダイスから1枚pop
+      result.tarot[nn] = dice.tarot.pop(); //ダイスから1枚pop
 
       if (selectRadio.positions.value === "0") {
-        result.position = 0; //正位置のみ
+        result.position[nn] = 0; //正位置のみ
       } else {
         shuffle(dice.position); //逆位置ありの場合のダイス判定
-        result.position = dice.position[0];
+        result.position[nn] = dice.position[0];
       }
 
       //引いたタロットカードの表示、ワンオラクル台
-      cardImg.innerHTML = `<img src="https://upload.wikimedia.org/wikipedia/commons/${
-        cac[result.card].img
-      }" id="${posp[result.position].disp}" alt="${
-        cac[result.card].name
-      }" ></img>`;
+      //place[1] = cac[nn].img;
+      //place.html = combine();
+      combine();
+      console.log(placeHtml);
+      cardImg.innerHTML = `${placeHtml}`;
+
+      //`<img src="https://upload.wikimedia.org/wikipedia/commons/${
+      //  cac[result.tarot[nn]].img
+      //}" id="${posp[result.position[nn]].disp}" alt="${
+      //  cac[result.tarot[nn]].name
+      //}" ></img>`;
 
       //引いたタロットカードの表示、スプレッド台
-      lol.oracle[
+      clock.oracle[
         nn
       ].innerHTML = `<img src="https://upload.wikimedia.org/wikipedia/commons/${
-        cac[result.card].img
-      }" id="${posp[result.position].disp}" alt="${
-        cac[result.card].name
+        cac[result.tarot[nn]].img
+      }" id="${posp[result.position[nn]].disp}" alt="${
+        cac[result.tarot[nn]].name
       }" ></img>`;
 
       //DOM操作
       notes3.innerHTML = `※3 タロットカード画像 出典:<br>　　フリー百科事典ウィキペディア (Wikipedia)`;
-      cardName.innerHTML = `${cac[result.card].name}`;
-      cardPosition.innerHTML = `${posp[result.position].word}`;
+      cardName.innerHTML = `${cac[result.tarot[nn]].name}`;
+      cardPosition.innerHTML = `${posp[result.position[nn]].word}`;
       shuffleButton.disabled = true;
 
-      if (nn >= 3) {
+      if (nn >= 2) {
         dealButton.disabled = true;
       } else {
         resetButton.disabled = false;
-      }
-
-      //引いた時の日時取得
-      if (nn === 0) {
-        lol.now(new Date());
-        nowDate.innerHTML = `${lol.date}<br>${lol.time}`;
-        lol.log.date = `${lol.date}<br>${lol.time}`;
-        console.log(lol.log.date);
-        console.log(place);
       }
 
       //何枚引いたかカウント、加算
@@ -250,7 +276,19 @@
   resetButton.addEventListener(
     "click",
     () => {
-      lol.log.spreadNumber++;
+      //引いた時の日時取得
+      clock.now(new Date());
+      result.clock = `${clock.date}<br>${clock.time}`;
+
+      console.log(result.tarot);
+      console.log(result.position);
+      console.log(result.clock);
+      console.log(result.spreadNumber);
+
+      //////クラス導入、ログ書き込み////////
+      //////////////////////////////////
+
+      result.spreadNumber++;
       reset();
     },
     false
