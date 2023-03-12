@@ -16,7 +16,34 @@
       arr[i] = temp;
     }
     return arr;
-  } //---ここまで、シャッフル用関数
+  }
+  //---ここまで、シャッフル用関数
+
+  //---左ボタン、swiching制御
+  function leftSwiching() {
+    if (record.number > 1) {
+      record.number--;
+    }
+
+    leftButon.disabled = record.number === 1 ? true : false;
+    rightButton.disabled = record.number === record.length ? true : false;
+    shuffleButton.disabled = dealButton.disabled =
+      record.number < record.length ? true : false;
+  }
+  //---左ボタン、ここまで
+
+  //---右ボタン、swiching制御
+  function rightSwiching() {
+    if (record.number < record.length) {
+      record.number++;
+    }
+
+    leftButon.disabled = record.number === 1 ? true : false;
+    rightButton.disabled = record.number === record.length ? true : false;
+    shuffleButton.disabled = dealButton.disabled =
+      record.number === record.length ? false : true;
+  }
+  //---右ボタン、ここまで
   //------関数、ここまで--------//
 
   //------DOM操作定義----------//
@@ -45,8 +72,12 @@
 
   //------各種変数--------------//
   let nn = 0; //引いた枚数
-  let sheet = null; //クラス用
-  const record = []; //クラス格納用
+  let oracle;
+  const record = {
+    number: 1,
+    length: 1,
+    sheet: [null]
+  };
 
   //------変数、ここまで---------//
 
@@ -155,10 +186,9 @@
     }
 
     makeTable() {
-      console.log("class" + this.tarot);
-      console.log(this.position);
-      console.log(this.clock);
-      console.log(this.spreadNumber);
+      record.sheet.push(null);
+      record.length = record.sheet.length;
+      record.number = record.sheet.length;
     }
   }
 
@@ -267,23 +297,37 @@
       console.log(result.spreadNumber);
 
       //////クラス導入、ログ書き込み////////
-      sheet = new Oracle(
+      oracle = new Oracle(
         result.tarot,
         result.position,
         result.clock,
         result.spreadNumber
       );
-      record[result.spreadNumber - 1] = sheet;
-      console.log(record[result.spreadNumber - 1]);
+      oracle.makeTable();
+
+      record.sheet[record.number - 1] = oracle;
+      console.log(record.sheet[record.number - 1].tarot[1]);
 
       //////クラス導入、ここまで///////////
 
       result.spreadNumber++;
       reset();
+      leftButon.disabled = false;
     },
     false
   );
 
+  //---
+  leftButon.addEventListener("click", () => {
+    leftSwiching();
+  });
+  //---
+
+  //---
+  rightButton.addEventListener("click", () => {
+    rightSwiching();
+  });
+  //---
   //------スクリプト、ここまで---
 
   //////ここまで////////////////////
