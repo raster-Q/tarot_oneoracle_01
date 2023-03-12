@@ -45,6 +45,8 @@
 
   //------各種変数--------------//
   let nn = 0; //引いた枚数
+  let sheet = null; //クラス用
+  const record = []; //クラス格納用
 
   //------変数、ここまで---------//
 
@@ -124,13 +126,13 @@
 
     //分解url配列
     arr: [
-      '`<img src="https://upload.wikimedia.org/wikipedia/commons/',
+      '<img src="https://upload.wikimedia.org/wikipedia/commons/',
       cac[nn].img,
       '" id="',
       posp[nn].disp,
       '" alt="',
       cac[nn].name,
-      '" ></img>`'
+      '" ></img>'
     ],
 
     //合成url関数
@@ -143,29 +145,24 @@
   };
   //------オブジェクト、ここまで---------//
 
-  //------クラス関連------------
-  class oracle {
-    constructor(date) {
-      this.date = date;
+  //------クラス関連-------------------//
+  class Oracle {
+    constructor(tarot, position, clock, spreadNumber) {
+      this.tarot = tarot;
+      this.position = position;
+      this.clock = clock;
+      this.spreadNumber = spreadNumber;
     }
 
     makeTable() {
-      switch (nn) {
-        case 0:
-          console.log("けーす0");
-          console.log(this.date);
-          break;
-        case 1:
-          console.log("けーす1");
-          console.log(this.date);
-          break;
-        default:
-          console.log("defo");
-      }
+      console.log("class" + this.tarot);
+      console.log(this.position);
+      console.log(this.clock);
+      console.log(this.spreadNumber);
     }
   }
 
-  //------クラス、ここまで-------
+  //------クラス、ここまで------------//
 
   ////////初期配置////////////////////////////////////////
   //---初期読み込みで、各種DOM操作
@@ -184,7 +181,7 @@
     notes3.innerHTML = `※3 カード裏面画像 出典:<br>　　「無料イラストなら「イラストAC」`;
     nn = 0; //タロットを引いた枚数、0枚にリセット
     shuffleButton.disabled = false; //シャッフルは、押せるように
-    resetButton.disabled = true; //リセットは、押せるように
+    resetButton.disabled = true; //リセットは、押せないように
     dealButton.disabled = false; //1枚引くは、押せるように
     oracle1.innerHTML = ``; //表示を切る
     oracle2.innerHTML = ``; //表示を切る
@@ -270,6 +267,15 @@
       console.log(result.spreadNumber);
 
       //////クラス導入、ログ書き込み////////
+      sheet = new Oracle(
+        result.tarot,
+        result.position,
+        result.clock,
+        result.spreadNumber
+      );
+      record[result.spreadNumber - 1] = sheet;
+      console.log(record[result.spreadNumber - 1]);
+
       //////クラス導入、ここまで///////////
 
       result.spreadNumber++;
