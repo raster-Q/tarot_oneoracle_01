@@ -130,7 +130,11 @@
       if (this.timerID === null) {
         this.timerID = setInterval(() => {
           this.now(new Date());
-          nowDate.innerHTML = `${this.date}<br>${this.time}`;
+
+          //record回想時に、clock常時更新を止める
+          if (record.number === record.length) {
+            nowDate.innerHTML = `${this.date}<br>${this.time}`;
+          }
         }, 10);
       }
     }
