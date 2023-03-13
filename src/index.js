@@ -27,6 +27,7 @@
 
     leftButon.disabled = record.number === 1 ? true : false;
     rightButton.disabled = record.number === record.length ? true : false;
+
     shuffleButton.disabled = dealButton.disabled =
       record.number < record.length ? true : false;
   }
@@ -40,10 +41,48 @@
 
     leftButon.disabled = record.number === 1 ? true : false;
     rightButton.disabled = record.number === record.length ? true : false;
+
     shuffleButton.disabled = dealButton.disabled =
       record.number === record.length ? false : true;
   }
   //---右ボタン、ここまで
+
+  //---recored閲覧関数(左右ボタン共通)
+  function browse() {
+    if (record.number < record.length) {
+      //oracle1、スプレッド台表示
+      clock.oracle[0].innerHTML = `${record.sheet[record.number].url[0]}`;
+      console.log(record.number);
+      console.log(record.sheet[record.number].url[0]);
+
+      //oracle2、スプレッド台表示
+      clock.oracle[1].innerHTML =
+        record.sheet[record.number].url[1] === null
+          ? ``
+          : `${record.sheet[record.number].url[1]}`;
+
+      //oracle3、スプレッド台表示
+      clock.oracle[2].innerHTML =
+        record.sheet[record.number].url[2] === null
+          ? ``
+          : `${record.sheet[record.number].url[2]}`;
+
+      //日付＆時間、スプレッド台表示
+      nowDate.innerHTML = `${record.sheet[record.number].clock}`;
+
+      //スプレッドナンバー、スプレッド台表示
+      spreadNumber.innerHTML = `No.${record.sheet[record.number].spreadNumber}`;
+    }
+
+    //スプレッド台をクリーンに
+    else if (record.number === record.length) {
+      clock.oracle[0].innerHTML = ``;
+      clock.oracle[1].innerHTML = ``;
+      clock.oracle[2].innerHTML = ``;
+      spreadNumber.innerHTML = `No.${result.spreadNumber}`; //スプレッドナンバー表示
+    }
+  }
+  //---recored閲覧関数、ここまで
   //------関数、ここまで--------//
 
   //------DOM操作定義----------//
@@ -72,7 +111,9 @@
 
   //------各種変数--------------//
   let nn = 0; //引いた枚数
-  let oracle;
+  let oracle; //クラス代入用
+
+  //閲覧用、number=選択中、length=項数、sheet=クラスで生成されたオブジェクトの格納用
   const record = {
     number: 1,
     length: 1,
@@ -187,9 +228,9 @@
     }
 
     makeTable() {
-      record.sheet.push(null);
-      record.length = record.sheet.length;
-      record.number = record.sheet.length;
+      record.sheet.push(null); //新規格納スペース作成、クラス生成オブジェクト
+      record.length = record.sheet.length; //閲覧中用の数字
+      record.number = record.sheet.length; //項数
     }
   }
 
@@ -221,6 +262,7 @@
     result.tarot = null; //結果内容初期化
     result.position = null; //結果内容初期化
     result.clock = null; //結果内容初期化
+    result.url = [null, null, null]; //結果内容を初期化（重要）
   }
   reset();
 
@@ -268,6 +310,7 @@
       cardPosition.innerHTML = `${posp[result.position].word}`;
       shuffleButton.disabled = true;
 
+      //3枚までしか引けない様にするための条件文
       if (nn >= 2) {
         dealButton.disabled = true;
       } else {
@@ -278,8 +321,6 @@
       nn++;
       leftButon.disabled = true;
       rightButton.disabled = true;
-
-      //lolへ、ログ用のデータ入力
     },
     false
   );
@@ -297,8 +338,6 @@
       oracle.makeTable();
 
       record.sheet[record.number - 1] = oracle;
-      console.log(record.sheet[record.number - 1]);
-
       //////クラス導入、ここまで///////////
 
       result.spreadNumber++;
@@ -311,12 +350,15 @@
   //---左ボタン、イベント
   leftButon.addEventListener("click", () => {
     leftSwiching();
+    browse();
   });
+
   //---左ボタン、ここまで
 
   //---右ボタン、イベント
   rightButton.addEventListener("click", () => {
     rightSwiching();
+    browse();
   });
   //---右ボタン、ここまで
   //------スクリプト、ここまで---
