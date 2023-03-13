@@ -19,34 +19,6 @@
   }
   //---ここまで、シャッフル用関数
 
-  //---左ボタン、swiching制御
-  function leftSwiching() {
-    if (record.number > 1) {
-      record.number--;
-    }
-
-    leftButon.disabled = record.number === 1 ? true : false;
-    rightButton.disabled = record.number === record.length ? true : false;
-
-    shuffleButton.disabled = dealButton.disabled =
-      record.number < record.length ? true : false;
-  }
-  //---左ボタン、ここまで
-
-  //---右ボタン、swiching制御
-  function rightSwiching() {
-    if (record.number < record.length) {
-      record.number++;
-    }
-
-    leftButon.disabled = record.number === 1 ? true : false;
-    rightButton.disabled = record.number === record.length ? true : false;
-
-    shuffleButton.disabled = dealButton.disabled =
-      record.number === record.length ? false : true;
-  }
-  //---右ボタン、ここまで
-
   //---recored閲覧関数(左右ボタン共通)
   function browse() {
     if (record.number < record.length) {
@@ -124,7 +96,7 @@
 
   //------配列定義--------------//
   //---カードデータ2次元配列
-  //-★ c(ard) + c ★
+  //-★ ca(rd) + c ★
   const cac = [
     { img: "d/de/RWS_Tarot_01_Magician.jpg", name: "魔術師" },
     { img: "d/d7/RWS_Tarot_13_Death.jpg", name: "死神" },
@@ -243,7 +215,7 @@
   spreadNumber.innerHTML = `No.${record.number}`; //初期読み込み時、スプレッドナンバー表示
 
   function reset() {
-    cardImg.innerHTML = `<img src="./image/card_ura_01.png" alt="カードの裏" id="back" />`; //カード裏面
+    cardImg.innerHTML = `<span class="back" alt="カードの裏の画像"></span>`; //カード裏面、cssから読み込み
     cardPosition.innerHTML = `<i>Position</i>`;
     cardName.innerHTML = `<i>Tarot card</i>`;
     dice.tarot = [...Array(cac.length).keys()]; //タロットの使用枚数を配列に取得
@@ -277,7 +249,7 @@
     "click",
     () => {
       shuffle(dice.tarot);
-      cardImg.innerHTML = `<img src="./image/card_ura_01.png" alt="カードの裏" id="back" class="keyframe0 animation" />`;
+      cardImg.innerHTML = `<span class="back keyframe0 animation" alt="カードの裏の画像"></span>`; //カード裏の画像、cssから読み込み
     },
     false
   ); //class追加により、cssによる画像のアニメーションを実現
@@ -349,7 +321,16 @@
 
   //---左ボタン、イベント
   leftButon.addEventListener("click", () => {
-    leftSwiching();
+    if (record.number > 1) {
+      record.number--;
+    }
+
+    leftButon.disabled = record.number === 1 ? true : false;
+    rightButton.disabled = record.number === record.length ? true : false;
+
+    shuffleButton.disabled = dealButton.disabled =
+      record.number < record.length ? true : false;
+
     browse();
   });
 
@@ -357,7 +338,16 @@
 
   //---右ボタン、イベント
   rightButton.addEventListener("click", () => {
-    rightSwiching();
+    if (record.number < record.length) {
+      record.number++;
+    }
+
+    leftButon.disabled = record.number === 1 ? true : false;
+    rightButton.disabled = record.number === record.length ? true : false;
+
+    shuffleButton.disabled = dealButton.disabled =
+      record.number === record.length ? false : true;
+
     browse();
   });
   //---右ボタン、ここまで
