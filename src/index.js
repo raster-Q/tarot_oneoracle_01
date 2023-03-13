@@ -148,18 +148,16 @@
 
   //---出目（ダイス）格納、及び、クラス生成の元
   const result = {
-    tarot: [null, null, null],
-    position: [null, null, null],
+    tarot: null,
+    position: null,
+    url: [null, null, null],
     clock: null,
     spreadNumber: 1
   };
 
   //---カード表示用url作成
   const place = {
-    //完全url
-    url: null,
-
-    //分解url配列
+    //分解url配列（2重配列内？オブジェクトを何故かarrに組み込めず、適当な初期値を入れている）
     arr: [
       '<img src="https://upload.wikimedia.org/wikipedia/commons/',
       cac[nn].img,
@@ -172,19 +170,18 @@
 
     //合成url関数
     combine: function () {
-      this.arr[1] = cac[result.tarot[nn]].img;
-      this.arr[3] = posp[result.position[nn]].disp;
-      this.arr[5] = cac[result.tarot[nn]].name;
-      this.url = this.arr.join("");
+      this.arr[1] = cac[result.tarot].img;
+      this.arr[3] = posp[result.position].disp;
+      this.arr[5] = cac[result.tarot].name;
+      result.url[nn] = this.arr.join("");
     }
   };
   //------オブジェクト、ここまで---------//
 
   //------クラス関連-------------------//
   class Oracle {
-    constructor(tarot, position, clock, spreadNumber) {
-      this.tarot = tarot;
-      this.position = position;
+    constructor(url, clock, spreadNumber) {
+      this.url = url;
       this.clock = clock;
       this.spreadNumber = spreadNumber;
     }
@@ -202,7 +199,7 @@
   //---初期読み込みで、各種DOM操作
   leftButon.disabled = true; //初期読み込みで、押せない様に
   rightButton.disabled = true; //初期読み込みで、押せない様に
-  spreadNumber.innerHTML = `No.${result.spreadNumber}`; //初期読み込み時、スプレッドナンバー表示
+  spreadNumber.innerHTML = `No.${record.number}`; //初期読み込み時、スプレッドナンバー表示
 
   function reset() {
     cardImg.innerHTML = `<img src="./image/card_ura_01.png" alt="カードの裏" id="back" />`; //カード裏面
@@ -221,10 +218,9 @@
     oracle2.innerHTML = ``; //表示を切る
     oracle3.innerHTML = ``; //表示を切る
     spreadNumber.innerHTML = `No.${result.spreadNumber}`; //スプレッドナンバー表示
-    result.tarot = [null, null, null]; //結果内容初期化
-    result.position = [null, null, null]; //結果内容初期化
+    result.tarot = null; //結果内容初期化
+    result.position = null; //結果内容初期化
     result.clock = null; //結果内容初期化
-    place.url = null; //
   }
   reset();
 
@@ -250,27 +246,26 @@
   dealButton.addEventListener(
     "click",
     () => {
-      result.tarot[nn] = dice.tarot.pop(); //ダイスから1枚pop
+      result.tarot = dice.tarot.pop(); //ダイスから1枚pop
 
       if (selectRadio.positions.value === "0") {
-        result.position[nn] = 0; //正位置のみ
+        result.position = 0; //正位置のみ
       } else {
         shuffle(dice.position); //逆位置ありの場合のダイス判定
-        result.position[nn] = dice.position[0];
+        result.position = dice.position[0];
       }
 
       //引いたタロットカードの表示、ワンオラクル台
       place.combine();
-      console.log(place.url);
-      cardImg.innerHTML = `${place.url}`;
+      cardImg.innerHTML = result.url[nn];
 
       //引いたタロットカードの表示、スプレッド台
-      clock.oracle[nn].innerHTML = `${place.url}`;
+      clock.oracle[nn].innerHTML = result.url[nn];
 
       //DOM操作
       notes3.innerHTML = `※3 タロットカード画像 出典:<br>　　フリー百科事典ウィキペディア (Wikipedia)`;
-      cardName.innerHTML = `${cac[result.tarot[nn]].name}`;
-      cardPosition.innerHTML = `${posp[result.position[nn]].word}`;
+      cardName.innerHTML = `${cac[result.tarot].name}`;
+      cardPosition.innerHTML = `${posp[result.position].word}`;
       shuffleButton.disabled = true;
 
       if (nn >= 2) {
@@ -281,6 +276,8 @@
 
       //何枚引いたかカウント、加算
       nn++;
+      leftButon.disabled = true;
+      rightButton.disabled = true;
 
       //lolへ、ログ用のデータ入力
     },
@@ -295,22 +292,12 @@
       clock.now(new Date());
       result.clock = `${clock.date}<br>${clock.time}`;
 
-      console.log(result.tarot);
-      console.log(result.position);
-      console.log(result.clock);
-      console.log(result.spreadNumber);
-
       //////クラス導入、ログ書き込み////////
-      oracle = new Oracle(
-        result.tarot,
-        result.position,
-        result.clock,
-        result.spreadNumber
-      );
+      oracle = new Oracle(result.url, result.clock, result.spreadNumber);
       oracle.makeTable();
 
       record.sheet[record.number - 1] = oracle;
-      console.log(record.sheet[record.number - 1].tarot[1]);
+      console.log(record.sheet[record.number - 1]);
 
       //////クラス導入、ここまで///////////
 
@@ -321,17 +308,17 @@
     false
   );
 
-  //---
+  //---左ボタン、イベント
   leftButon.addEventListener("click", () => {
     leftSwiching();
   });
-  //---
+  //---左ボタン、ここまで
 
-  //---
+  //---右ボタン、イベント
   rightButton.addEventListener("click", () => {
     rightSwiching();
   });
-  //---
+  //---右ボタン、ここまで
   //------スクリプト、ここまで---
 
   //////ここまで////////////////////
