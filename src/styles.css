@@ -18,6 +18,14 @@ h3 {
   min-width: 240px;
 }
 
+#cardName {
+  background-color: rgb(252, 222, 233);
+}
+
+#cardPosition {
+  background-color: rgb(229, 252, 251);
+}
+
 #back {
   width: 95%;
   padding: 2%;

@@ -244,13 +244,13 @@
 
   function reset() {
     cardImg.innerHTML = `<img src="./image/card_ura_01.png" alt="カードの裏" id="back" />`; //カード裏面
-    cardPosition.innerText = `－－－`;
-    cardName.innerText = `－－－－－－`;
+    cardPosition.innerHTML = `<i>Position</i>`;
+    cardName.innerHTML = `<i>Tarot card</i>`;
     dice.tarot = [...Array(cac.length).keys()]; //タロットの使用枚数を配列に取得
     shuffle(dice.tarot); //初期読み込みで、すぐにカードシャッフル
     notes1.textContent = `※1 カード枚数${dice.tarot.length}枚のみ`;
-    notes2.textContent = `※2 引ける枚数は3枚まで`;
-    notes3.innerHTML = `※3 カード裏面画像 出典:<br>　　「無料イラストなら「イラストAC」`;
+    notes2.textContent = `※2 引ける枚数3枚まで`;
+    notes3.innerHTML = `※3 カード裏面画像 出典:<br>　　『無料イラストなら「イラストAC」』`;
     nn = 0; //タロットを引いた枚数、0枚にリセット
     shuffleButton.disabled = false; //シャッフルは、押せるように
     resetButton.disabled = true; //リセットは、押せないように
@@ -305,7 +305,7 @@
       clock.oracle[nn].innerHTML = result.url[nn];
 
       //DOM操作
-      notes3.innerHTML = `※3 タロットカード画像 出典:<br>　　フリー百科事典ウィキペディア (Wikipedia)`;
+      notes3.innerHTML = `※3 タロットカード画像 出典:<br>　『フリー百科事典ウィキペディア (Wikipedia)』`;
       cardName.innerHTML = `${cac[result.tarot].name}`;
       cardPosition.innerHTML = `${posp[result.position].word}`;
       shuffleButton.disabled = true;
