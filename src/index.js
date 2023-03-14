@@ -24,8 +24,6 @@
     if (record.number < record.length) {
       //oracle1、スプレッド台表示
       clock.oracle[0].innerHTML = `${record.sheet[record.number].url[0]}`;
-      console.log(record.number);
-      console.log(record.sheet[record.number].url[0]);
 
       //oracle2、スプレッド台表示
       clock.oracle[1].innerHTML =
