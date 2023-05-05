@@ -176,6 +176,8 @@
       posp[nn].disp,
       '" alt="',
       cac[nn].name,
+      '" title="',
+      'Arthur Edward Waite,&#13;&#10;and Pamela Colman Smith… &#13;&#10;&#13;&#10;Thank you for using your tarot card and its design.&#13;&#10;&#13;&#10;May your great souls be full of light !',
       '" ></img>'
     ],
 
